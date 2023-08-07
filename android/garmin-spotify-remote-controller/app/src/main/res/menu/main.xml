@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="app.krakentom.garminspotifyremotecontroller.activities.MainActivity" >
+
+    <item
+        android:id="@+id/start_service"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="Start service"/>
+
+    <item
+        android:id="@+id/stop_service"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="Stop service"/>
+
+</menu>
