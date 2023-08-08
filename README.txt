@@ -1,7 +1,13 @@
-A) Download source code from GarminSpotifyRemoteController from github
+# GarminSpotifyRemoteController
+
+## How it works
+
+The Garmin application sends commands such as "play/stop," "next song," "volume up," "volume down," and "add to library" to the phone and waits for a response. The phone sends information about the currently playing track back to the Garmin application. The Android app uses the Garmin Connect IQ SDK to communicate with the Garmin device and waits for commands from it. When a command is received, the app calls the appropriate function through the Spotify SDK to control Spotify.
+
+## A) Download source code from GarminSpotifyRemoteController from github
 https://github.com/krakentom/GarminSpotifyRemoteController
 
-B) Build GarminApp
+## B) Build GarminApp
 
 1. Download and install visual studio code
 https://code.visualstudio.com/
@@ -21,7 +27,7 @@ https://developer.garmin.com/connect-iq/sdk/
 
 8. Copy SpotifyEdge.prg to GARMIN/APPS/ folder.
 
-C) Build AndroidApp
+## C) Build AndroidApp
 
 1. Download and install android studio
 https://developer.android.com/studio
