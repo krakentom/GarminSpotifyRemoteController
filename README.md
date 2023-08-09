@@ -1,4 +1,4 @@
-#GarminSpotifyRemoteController
+# GarminSpotifyRemoteController
 
 ## How it works
 
