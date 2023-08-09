@@ -35,10 +35,12 @@ class SpotifyEdgeApp extends Application.AppBase {
         var artist = msg.data["artist"];
         var length = msg.data["length"];
         var isInLibrary = msg.data["isInLibrary"];
+        var volume = msg.data["volume"];
 
         _songInfo = song + "\n\n"
             + artist + "\n\n"
             + length + "\n\n"
+            + "volume " + volume + "\n\n"
             + (song == "" ? "" : isInLibrary ? "in library" : "not in library");
 
         WatchUi.requestUpdate();

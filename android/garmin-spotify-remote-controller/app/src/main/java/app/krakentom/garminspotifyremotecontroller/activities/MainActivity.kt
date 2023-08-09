@@ -48,10 +48,12 @@ class MainActivity : AppCompatActivity() {
                 MyService.startService(this)
                 true
             }
+
             R.id.stop_service -> {
                 MyService.stopService(this)
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -63,7 +65,7 @@ class MainActivity : AppCompatActivity() {
                 MyService.spotifyAppRemote = spotifyConnectToAppRemote(true)
                 MyService.startService(this@MainActivity)
             } catch (error: Throwable) {
-                Log.e(TAG, "",error)
+                Log.e(TAG, "", error)
             }
         }
     }

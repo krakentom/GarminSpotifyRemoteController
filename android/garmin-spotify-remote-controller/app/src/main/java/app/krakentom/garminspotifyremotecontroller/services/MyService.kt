@@ -14,6 +14,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import app.krakentom.garminspotifyremotecontroller.R
 import app.krakentom.garminspotifyremotecontroller.activities.MainActivity
+import app.krakentom.garminspotifyremotecontroller.models.PlayerInfo
 import com.garmin.android.connectiq.ConnectIQ
 import com.garmin.android.connectiq.IQApp
 import com.garmin.android.connectiq.IQDevice
@@ -23,6 +24,7 @@ import com.spotify.android.appremote.api.SpotifyAppRemote
 import com.spotify.android.appremote.api.error.SpotifyDisconnectedException
 import com.spotify.protocol.client.Subscription
 import com.spotify.protocol.types.PlayerState
+import com.spotify.protocol.types.VolumeState
 
 class MyService : Service() {
 
@@ -36,6 +38,9 @@ class MyService : Service() {
 
     private val spotifyErrorCallback = { throwable: Throwable -> spotifyLogError(throwable) }
     private var spotifyPlayerStateSubscription: Subscription<PlayerState>? = null
+    private var spotifyVolumeStateSubscription: Subscription<VolumeState>? = null
+
+    private val _playerInfo: PlayerInfo = PlayerInfo()
 
     companion object {
         var spotifyAppRemote: SpotifyAppRemote? = null
@@ -44,6 +49,7 @@ class MyService : Service() {
             val startIntent = Intent(context, MyService::class.java)
             ContextCompat.startForegroundService(context, startIntent)
         }
+
         fun stopService(context: Context) {
             val stopIntent = Intent(context, MyService::class.java)
             context.stopService(stopIntent)
@@ -52,11 +58,19 @@ class MyService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        spotifyPlayerStateSubscription = spotifyCancelAndResetSubscription(spotifyPlayerStateSubscription)
+        spotifyPlayerStateSubscription =
+            spotifyCancelAndResetSubscription(spotifyPlayerStateSubscription)
         spotifyPlayerStateSubscription = spotifyAssertAppRemoteConnected()
             .playerApi
             .subscribeToPlayerState()
             .setEventCallback(spotifyPlayerStateEventCallback)
+
+        spotifyVolumeStateSubscription =
+            spotifyCancelAndResetSubscription(spotifyVolumeStateSubscription)
+        spotifyVolumeStateSubscription = spotifyAssertAppRemoteConnected()
+            .connectApi
+            .subscribeToVolumeState()
+            .setEventCallback(spotifyVolumeStateEventCallback)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -156,15 +170,19 @@ class MyService : Service() {
                     "playPause" -> {
                         spotifyPause()
                     }
+
                     "nextSong" -> {
                         spotifyNext()
                     }
+
                     "volumeUp" -> {
                         spotifyVolumeUp()
                     }
+
                     "volumeDown" -> {
                         spotifyVolumeDown()
                     }
+
                     "likeUnlikeSong" -> {
                         spotifyLikeUnlikeSong()
                     }
@@ -219,73 +237,76 @@ class MyService : Service() {
             .setErrorCallback(spotifyErrorCallback)
     }
 
-    private fun spotifyVolumeUp(){
+    private fun spotifyVolumeUp() {
         spotifyAssertAppRemoteConnected()
             .connectApi
             .connectIncreaseVolume()
             .setErrorCallback(spotifyErrorCallback)
     }
 
-    private fun spotifyVolumeDown(){
+    private fun spotifyVolumeDown() {
         spotifyAssertAppRemoteConnected()
             .connectApi
             .connectDecreaseVolume()
             .setErrorCallback(spotifyErrorCallback)
     }
 
-    private fun spotifyLikeUnlikeSong(){
+    private fun spotifyLikeUnlikeSong() {
         spotifyAssertAppRemoteConnected().let {
             it.playerApi
                 .playerState
                 .setResultCallback { playerState ->
-                    it.userApi.getLibraryState(playerState.track.uri).setResultCallback { libraryState ->
-                        if (libraryState.isAdded) {
-                            it.userApi
-                                .removeFromLibrary(playerState.track.uri)
-                                .setErrorCallback(spotifyErrorCallback)
-                        } else {
-                            it.userApi
-                                .addToLibrary(playerState.track.uri)
-                                .setErrorCallback(spotifyErrorCallback)
+                    it.userApi.getLibraryState(playerState.track.uri)
+                        .setResultCallback { libraryState ->
+                            if (libraryState.isAdded) {
+                                it.userApi
+                                    .removeFromLibrary(playerState.track.uri)
+                                    .setErrorCallback(spotifyErrorCallback)
+                            } else {
+                                it.userApi
+                                    .addToLibrary(playerState.track.uri)
+                                    .setErrorCallback(spotifyErrorCallback)
+                            }
                         }
-                    }
                 }
         }
     }
 
-    private val spotifyPlayerStateEventCallback = Subscription.EventCallback<PlayerState> { playerState ->
+    private val spotifyPlayerStateEventCallback =
+        Subscription.EventCallback<PlayerState> { playerState ->
+            spotifyAssertAppRemoteConnected().let {
+                it.userApi.getLibraryState(playerState.track.uri)
+                    .setResultCallback { libraryState ->
 
-        spotifyAssertAppRemoteConnected().let {
-            it.playerApi
-                .playerState
-                .setResultCallback { playerState ->
-                    it.userApi.getLibraryState(playerState.track.uri).setResultCallback { libraryState ->
-                        var isInLibrary = false;
+                        _playerInfo.song = playerState.track.name
+                        _playerInfo.artist = playerState.track.artist.name
+                        _playerInfo.duration = playerState.track.duration
+                        _playerInfo.isInLibrary = libraryState.isAdded
 
-                        if (libraryState.isAdded) {
-                            isInLibrary = true
-                        }
-
-                        val seconds = playerState.track.duration / 1000
-                        val minutes = seconds / 60
-                        val remainingSeconds = seconds % 60
-
-                        val message = mapOf(
-                            "song" to playerState.track.name,
-                            "artist" to playerState.track.artist.name,
-                            "length" to "%02d:%02d".format(minutes, remainingSeconds),
-                            "isInLibrary" to isInLibrary
-                        )
-
-                        garminConnectedDevices.forEach {
-                            try {
-                                garminConnectIQ.sendMessage(it, garminApp, message) { _, _, status -> }
-                            } catch (e: InvalidStateException) {
-                            } catch (e: ServiceUnavailableException) {
-                            }
-                        }
+                        sendPlayerInfoToGarmin()
                     }
-                }
+            }
+        }
+
+    private val spotifyVolumeStateEventCallback =
+        Subscription.EventCallback<VolumeState> { volumeState ->
+
+            _playerInfo.volume = volumeState.mVolume
+
+            sendPlayerInfoToGarmin()
+        }
+
+    private fun sendPlayerInfoToGarmin() {
+        garminConnectedDevices.forEach {
+            try {
+                garminConnectIQ.sendMessage(
+                    it,
+                    garminApp,
+                    _playerInfo.toMap()
+                ) { _, _, status -> }
+            } catch (e: Exception) {
+                Log.e(TAG, "", e)
+            }
         }
     }
 
@@ -309,8 +330,8 @@ class MyService : Service() {
                 override fun onApplicationNotInstalled(applicationId: String) {
                 }
             })
-        } catch (_: InvalidStateException) {
-        } catch (_: ServiceUnavailableException) {
+        } catch (e: Exception) {
+            Log.e(TAG, "", e)
         }
     }
 
