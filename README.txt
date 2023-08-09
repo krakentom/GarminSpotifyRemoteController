@@ -1,4 +1,4 @@
-# GarminSpotifyRemoteController
+#GarminSpotifyRemoteController
 
 ## How it works
 
@@ -21,11 +21,13 @@ https://developer.garmin.com/connect-iq/sdk/
 
 5. Replace "TODO YOUR WATCH ID" with new application id in Manifest.xml.
 
-6. Press CTRL + SHIFT + P and run command Monkey C: Build for Device
+6. Press CTRL + SHIFT + P and type "Monkey C: Generate a Developer Key"
 
-7. Connect your garmin to computer using USB.
+7. Press CTRL + SHIFT + P and run command Monkey C: Build for Device
 
-8. Copy SpotifyEdge.prg to GARMIN/APPS/ folder.
+8. Connect your garmin to computer using USB.
+
+9. Copy SpotifyEdge.prg to GARMIN/APPS/ folder.
 
 ## C) Build AndroidApp
 
