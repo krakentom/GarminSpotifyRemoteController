@@ -22,18 +22,30 @@ class SpotifyEdgeApp extends Application.AppBase {
     }
 
     function onPhone(msg) {
-        _song = msg.data["song"];
-        _artist = msg.data["artist"];
-        _length = msg.data["length"];
-        _isInLibrary = msg.data["isInLibrary"];
+        /* TEST DATA
+        {
+            "song": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit",
+            "artist":"Lorem ipsum",
+            "length":5000,
+            "isInLibrary":false
+        }
+        */
+
+        var song = msg.data["song"];
+        var artist = msg.data["artist"];
+        var length = msg.data["length"];
+        var isInLibrary = msg.data["isInLibrary"];
+
+        _songInfo = song + "\n\n"
+            + artist + "\n\n"
+            + length + "\n\n"
+            + (song == "" ? "" : isInLibrary ? "in library" : "not in library");
+
         WatchUi.requestUpdate();
     }
 }
 
-var _song = "";
-var _artist = "";
-var _length = "";
-var _isInLibrary = "";
+var _songInfo = "";
 
 function getApp() as SpotifyEdgeApp {
     return Application.getApp() as SpotifyEdgeApp;

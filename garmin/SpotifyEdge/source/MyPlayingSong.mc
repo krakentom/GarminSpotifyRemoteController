@@ -13,31 +13,10 @@ class MyPlayingSong extends WatchUi.Drawable {
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
         dc.drawText(
             dc.getWidth() / 2,
-            dc.getHeight() / 2 -100,
-            Graphics.FONT_SMALL,
-            _song,
-            Graphics.TEXT_JUSTIFY_CENTER
-        );
-        dc.drawText(
-            dc.getWidth() / 2,
-            dc.getHeight() / 2 - 50,
-            Graphics.FONT_SMALL,
-            _artist,
-            Graphics.TEXT_JUSTIFY_CENTER
-        );
-        dc.drawText(
-            dc.getWidth() / 2,
             dc.getHeight() / 2,
-            Graphics.FONT_SMALL,
-            _length,
-            Graphics.TEXT_JUSTIFY_CENTER
-        );
-        dc.drawText(
-            dc.getWidth() / 2,
-            dc.getHeight() / 2 + 50,
-            Graphics.FONT_SMALL,
-            _isInLibrary ? "In library" : "Not in library",
-            Graphics.TEXT_JUSTIFY_CENTER
+            Graphics.FONT_MEDIUM,
+            Graphics.fitTextToArea(_songInfo, Graphics.FONT_MEDIUM, dc.getWidth()-10, dc.getHeight(), true),
+            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
     }
 }
