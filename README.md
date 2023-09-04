@@ -23,7 +23,7 @@ https://developer.garmin.com/connect-iq/sdk/
 
 6. Press CTRL + SHIFT + P and type "Monkey C: Generate a Developer Key"
 
-7. Press CTRL + SHIFT + P and run command Monkey C: Build for Device
+7. Press CTRL + SHIFT + P and run the command Monkey C: Build for Device
 
 8. Connect your garmin to computer using USB.
 
@@ -34,24 +34,26 @@ https://developer.garmin.com/connect-iq/sdk/
 1. Download and install android studio
 https://developer.android.com/studio
 
-2. Copy GARMIN_WATCH_ID from garmin app to MyService.kt
+2. Copy GARMIN_WATCH_ID from the garmin app to MyService.kt
 
-3. In android studio click on Gradle in right toolbar. On top menu select "Execute Gradle Task" and run "gradle signingreport". 
-Copy SHA1 from console.
-
-4. Register your android app on spotify developer
+3. Register your android app on spotify developer
 https://developer.spotify.com/dashboard
 
-5. Set Redirect URIs to
+4. Set Redirect URIs to
 http://localhost/
 
-6. Set Android packages to
+5. Set Android packages to
 app.krakentom.garminspotifyremotecontroller
 
-7. Set Client ID to SHA1 from android studio gradle console.
+6. Copy Client ID from spotify developer (Basic Information) to SPOTIFY_CLIENT_ID variable.
 
-8. Connect phone with USB to computer
+7. In android studio click on Gradle in right toolbar. On top menu select "Execute Gradle Task" and run "gradle signingreport". 
+Copy SHA1 from console.
 
-9. Enable developer mode on the phone. And enable usb debuging.
+8. Set Package SHA1 fingerprint from the gradle console in spotify developer settting section.
 
-10. Run app from android studio on phone.
+9. Connect phone with USB to computer
+
+10. Enable developer mode on the phone and enable usb debuging.
+
+11. Run app from android studio on phone.
