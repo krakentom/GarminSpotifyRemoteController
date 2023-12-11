@@ -19,7 +19,7 @@ https://developer.garmin.com/connect-iq/sdk/
 
 4. Open folder GarminSpotifyRemoteController\garmin\SpotifyEdge in visual studio code
 
-5. Replace "TODO YOUR WATCH ID" with new application id in Manifest.xml.
+5. Press CTRL + P and type "manifest.xml" end press "ENTER", it will open manifest.xml file. Locate the "App UUID" section and click on the "Regenerate" button. This will replace "TODO YOUR WATCH ID" with the new application id. Copy this ID for future use in the Android app.
 
 6. Press CTRL + SHIFT + P and type "Monkey C: Generate a Developer Key"
 
@@ -28,29 +28,29 @@ https://developer.garmin.com/connect-iq/sdk/
 8. Connect your garmin to computer using USB.
 
 9. Copy SpotifyEdge.prg to GARMIN/APPS/ folder.
+    
+11. Disconnect your Garmin device from USB.
 
 ## C) Build AndroidApp
 
 1. Download and install android studio
 https://developer.android.com/studio
 
-2. Copy GARMIN_WATCH_ID from the garmin app to MyService.kt
+2. Paste the "GARMIN_WATCH_ID" from the "manifest.xml" file in the garmin project app into the MyService.kt file in the Android project.
 
-3. Register your android app on spotify developer
+3. In android studio click on Gradle in right toolbar. On top menu select "Execute Gradle Task" and run "gradle signingreport". 
+Copy SHA1 hash from console.
+
+4. Register your android app on spotify developer
 https://developer.spotify.com/dashboard
 
-4. Set Redirect URIs to
+5. In Spotify developer dashboard add new android package with package name "app.krakentom.garminspotifyremotecontroller" and package sha1 fingerprint from gradle console.
+Save changes.
+
+7. Set Redirect URIs to
 http://localhost/
 
-5. Set Android packages to
-app.krakentom.garminspotifyremotecontroller
-
-6. Copy Client ID from spotify developer (Basic Information) to SPOTIFY_CLIENT_ID variable.
-
-7. In android studio click on Gradle in right toolbar. On top menu select "Execute Gradle Task" and run "gradle signingreport". 
-Copy SHA1 from console.
-
-8. Set Package SHA1 fingerprint from the gradle console in spotify developer settting section.
+8. Copy the Client ID from the spotify developer (Basic Information) and paste it into the "SPOTIFY_CLIENT_ID" variable in the "MainActivity.kt" file.
 
 9. Connect phone with USB to computer
 
