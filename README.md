@@ -12,24 +12,28 @@ https://github.com/krakentom/GarminSpotifyRemoteController
 1. Download and install visual studio code
 https://code.visualstudio.com/
 
-2. Install MonkeyC extension from Garmin
+2. Install MonkeyC extension from Garmin (Extension ID: Garmin.monkey-c)
 
 3. Register on Garmin, download and install Connect IQ SDK Manager
 https://developer.garmin.com/connect-iq/sdk/
 
-4. Open folder GarminSpotifyRemoteController\garmin\SpotifyEdge in visual studio code
+4. Extract "connectiq-sdk-manager-windows.zip" and run "sdkmanager.exe" click on the "Login" button and continue with instalation.
 
-5. Press CTRL + P and type "manifest.xml" end press "ENTER", it will open manifest.xml file. Locate the "App UUID" section and click on the "Regenerate" button. This will replace "TODO YOUR WATCH ID" with the new application id. Copy this ID for future use in the Android app.
+5. Download SDK and Device for Garmin Edge 530
 
-6. Press CTRL + SHIFT + P and type "Monkey C: Generate a Developer Key"
+6. Open folder GarminSpotifyRemoteController\garmin\SpotifyEdge in visual studio code
 
-7. Press CTRL + SHIFT + P and run the command Monkey C: Build for Device
+7. Press CTRL + P and type "manifest.xml" end press "ENTER", it will open manifest.xml file. Locate the "App UUID" section and click on the "Regenerate" button. This will replace "TODO YOUR WATCH ID" with the new application id. Copy this ID for future use in the Android app.
 
-8. Connect your garmin to computer using USB.
+8. Press CTRL + SHIFT + P and type "Monkey C: Generate a Developer Key"
 
-9. Copy SpotifyEdge.prg to GARMIN/APPS/ folder.
+9. Press CTRL + SHIFT + P and run the command Monkey C: Build for Device
+
+10. Connect your garmin to computer using USB.
+
+11. Copy SpotifyEdge.prg to GARMIN/APPS/ folder.
     
-11. Disconnect your Garmin device from USB.
+12. Disconnect your Garmin device from USB.
 
 ## C) Build AndroidApp
 
